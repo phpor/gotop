@@ -1,5 +1,3 @@
-// +build freebsd linux darwin
-
 package widgets
 
 import (
@@ -22,7 +20,7 @@ func (self *Proc) update() {
 }
 
 func Processes() []Process {
-	output, _ := exec.Command("ps", "-axo", "pid,comm,pcpu,pmem,args").Output()
+	output, _ := exec.Command("ps", "-caxo", "pid,comm,pcpu,pmem,args").Output()
 	// converts to []string and removes the header
 	strOutput := strings.Split(strings.TrimSpace(string(output)), "\n")[1:]
 	processes := []Process{}
