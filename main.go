@@ -37,7 +37,7 @@ var (
 	zoom         = 7
 	zoomInterval = 3
 
-	cpu  *w.CPU
+	cpu  *w.ContainerCPU
 	mem  *w.Mem
 	proc *w.Proc
 	net  *w.Net
@@ -174,13 +174,9 @@ func widgetColors() {
 	mem.LineColor["Swap"] = ui.Color(colorscheme.SwapMem)
 
 	LineColor := make(map[string]ui.Color)
-	if cpu.Count <= 8 {
-		for i := 0; i < len(cpu.Data); i++ {
-			LineColor[fmt.Sprintf("CPU%d", i)] = ui.Color(colorscheme.CPULines[i])
-		}
-	} else {
-		LineColor["Average"] = ui.Color(colorscheme.CPULines[0])
-	}
+
+	LineColor["Average"] = ui.Color(colorscheme.CPULines[0])
+
 	cpu.LineColor = LineColor
 
 	if !minimal {
@@ -194,7 +190,7 @@ func initWidgets() {
 	wg.Add(widgetCount)
 
 	go func() {
-		cpu = w.NewCPU(interval, zoom)
+		cpu = w.NewContainerCPU(interval, zoom)
 		wg.Done()
 	}()
 	go func() {
