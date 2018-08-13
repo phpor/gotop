@@ -37,7 +37,7 @@ func NewMem(interval time.Duration, zoom int) *Mem {
 
 func (self *Mem) update() {
 	memstat,_ := mem.Usage()
-	memUsedPercent := float64(memstat.Used)/float64((memstat.Total) * 100)
+	memUsedPercent := float64(memstat.Used)/float64(memstat.Total) * 100
 	self.Data["Main"] = append(self.Data["Main"], memUsedPercent)
 
 	mainTotalBytes, mainTotalMagnitude := utils.ConvertBytes(memstat.Total)

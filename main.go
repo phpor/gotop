@@ -31,7 +31,7 @@ var (
 
 	colorscheme = colorschemes.Default
 
-	minimal      = false
+	minimal      = true
 	widgetCount  = 6
 	interval     = time.Second
 	zoom         = 7
@@ -54,7 +54,6 @@ Usage: gotop [options]
 Options:
   -c, --color=NAME      Set a colorscheme.
   -h, --help            Show this screen.
-  -m, --minimal         Only show CPU, Mem and Process widgets.
   -r, --rate=RATE       Number of times per second to update CPU and Mem widgets [default: 1].
   -v, --version         Show version.
 
@@ -71,10 +70,9 @@ Colorschemes:
 		handleColorscheme(val.(string))
 	}
 
-	minimal, _ = args["--minimal"].(bool)
-	if minimal {
-		widgetCount = 3
-	}
+
+	widgetCount = 3
+
 
 	rateStr, _ := args["--rate"].(string)
 	rate, _ := strconv.ParseFloat(rateStr, 64)
@@ -106,9 +104,9 @@ func setupGrid() {
 	ui.Body.Rows = 12
 
 	if minimal {
-		ui.Body.Set(0, 0, 12, 6, cpu)
-		ui.Body.Set(0, 6, 6, 12, mem)
-		ui.Body.Set(6, 6, 12, 12, proc)
+		ui.Body.Set(0, 0, 6, 6, cpu)
+		ui.Body.Set(6, 0, 12, 6, mem)
+		ui.Body.Set(0, 6, 12, 12, proc)
 	} else {
 		ui.Body.Set(0, 0, 12, 4, cpu)
 

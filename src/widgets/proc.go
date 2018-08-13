@@ -9,7 +9,8 @@ import (
 
 	"github.com/cjbassi/gotop/src/utils"
 	ui "github.com/cjbassi/termui"
-	psCPU "github.com/shirou/gopsutil/cpu"
+	"github.com/phpor/ctools/cpu"
+	"github.com/phpor/ctools/mem"
 )
 
 const (
@@ -29,6 +30,7 @@ type Process struct {
 type Proc struct {
 	*ui.Table
 	cpuCount       float64
+	memScale 	   float64
 	interval       time.Duration
 	sortMethod     string
 	groupedProcs   []Process
@@ -38,11 +40,15 @@ type Proc struct {
 }
 
 func NewProc(keyPressed chan bool) *Proc {
-	cpuCount, _ := psCPU.Counts(false)
+	cpuCount,_ := cpu.CountLimitedCPU()
+	limitedStat,_ := mem.Usage()
+	systemStat,_ := mem.GetSystemMemStat()
+	memScale := float64(limitedStat.Total) / float64(systemStat.Total)
 	self := &Proc{
 		Table:      ui.NewTable(),
 		interval:   time.Second,
-		cpuCount:   float64(cpuCount),
+		cpuCount:   cpuCount,
+		memScale:   memScale,
 		sortMethod: "c",
 		group:      true,
 		KeyPressed: keyPressed,
