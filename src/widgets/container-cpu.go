@@ -37,7 +37,7 @@ func NewContainerCPU(interval time.Duration, zoom int) *ContainerCPU {
 
 // calculates the CPU usage over a 1 second interval and blocks for the duration
 func (self *ContainerCPU) update() {
-		percent := cpu.GetCpuUsage() * 100
+		percent := cpu.GetCpuUsageNoDelay() * 100
 		self.Data["Average"] = append(self.Data["Average"], percent)
 		self.Labels["Average"] = fmt.Sprintf("%3.0f%%", percent)
 }
