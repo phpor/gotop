@@ -122,7 +122,7 @@ func (self *Proc) Sort() {
 // ColResize overrides the default ColResize in the termui table.
 func (self *Proc) ColResize() {
 	self.ColWidths = []int{
-		5, utils.Max(self.X-26, 10), 4, 4,
+		8, utils.Max(self.X-29, 10), 4, 4,
 	}
 }
 
