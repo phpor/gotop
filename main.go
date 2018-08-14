@@ -103,20 +103,10 @@ func setupGrid() {
 	ui.Body.Cols = 12
 	ui.Body.Rows = 12
 
-	if minimal {
-		ui.Body.Set(0, 0, 6, 6, cpu)
-		ui.Body.Set(6, 0, 12, 6, mem)
-		ui.Body.Set(0, 6, 12, 12, proc)
-	} else {
-		ui.Body.Set(0, 0, 12, 4, cpu)
 
-		ui.Body.Set(0, 4, 4, 6, disk)
-		ui.Body.Set(0, 6, 4, 8, temp)
-		ui.Body.Set(4, 4, 12, 8, mem)
-
-		ui.Body.Set(0, 8, 6, 12, net)
-		ui.Body.Set(6, 8, 12, 12, proc)
-	}
+	ui.Body.Set(0, 0, 6, 3, cpu)
+	ui.Body.Set(6, 0, 12, 3, mem)
+	ui.Body.Set(0, 3, 12, 12, proc)
 }
 
 func keyBinds() {
@@ -177,10 +167,6 @@ func widgetColors() {
 
 	cpu.LineColor = LineColor
 
-	if !minimal {
-		temp.TempLow = ui.Color(colorscheme.TempLow)
-		temp.TempHigh = ui.Color(colorscheme.TempHigh)
-	}
 }
 
 // load widgets asynchronously but wait till they are all finished
