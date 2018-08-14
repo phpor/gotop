@@ -29,8 +29,6 @@ type Process struct {
 
 type Proc struct {
 	*ui.Table
-	cpuCount       float64
-	memScale 	   float64
 	interval       time.Duration
 	sortMethod     string
 	groupedProcs   []Process
@@ -40,15 +38,10 @@ type Proc struct {
 }
 
 func NewProc(keyPressed chan bool) *Proc {
-	cpuCount,_ := cpu.CountLimitedCPU()
-	limitedStat,_ := mem.Usage()
-	systemStat,_ := mem.GetSystemMemStat()
-	memScale := float64(limitedStat.Total) / float64(systemStat.Total)
+
 	self := &Proc{
 		Table:      ui.NewTable(),
 		interval:   time.Second,
-		cpuCount:   cpuCount,
-		memScale:   memScale,
 		sortMethod: "c",
 		group:      true,
 		KeyPressed: keyPressed,
@@ -76,6 +69,18 @@ func NewProc(keyPressed chan bool) *Proc {
 	}()
 
 	return self
+}
+
+func (self *Proc) CountCpu() float64 {
+	cpuCount,_ := cpu.CountLimitedCPU()
+	return cpuCount
+}
+
+func (self *Proc) MemScale() float64 {
+	limitedStat,_ := mem.Usage()
+	systemStat,_ := mem.GetSystemMemStat()
+	memScale := float64(limitedStat.Total) / float64(systemStat.Total)
+	return memScale
 }
 
 // Sort sorts either the grouped or ungrouped []Process based on the sortMethod.
@@ -106,6 +111,9 @@ func (self *Proc) Sort() {
 	case "m":
 		sort.Sort(sort.Reverse(ProcessByMem(*processes)))
 		self.Header[3] += DOWN
+	case "C":
+		sort.Sort(sort.Reverse(ProcessByCommand(*processes)))
+		self.Header[1] += DOWN
 	}
 
 	self.Rows = FieldsToStrings(*processes, self.group)
@@ -183,7 +191,7 @@ func (self *Proc) keyBinds() {
 		self.KeyPressed <- true
 	})
 
-	ui.On("m", "c", "p", func(e ui.Event) {
+	ui.On("m", "c", "p", "C", func(e ui.Event) {
 		if self.sortMethod != e.Key {
 			self.sortMethod = e.Key
 			self.Top()
@@ -310,4 +318,21 @@ func (P ProcessByMem) Swap(i, j int) {
 // Less implements Sort interface
 func (P ProcessByMem) Less(i, j int) bool {
 	return P[i].Mem < P[j].Mem
+}
+
+
+type ProcessByCommand []Process
+
+func (P ProcessByCommand) Len() int {
+	return len(P)
+}
+
+
+func (P ProcessByCommand) Swap(i,j int) {
+	P[i], P[j] = P[j], P[i]
+}
+
+
+func (P ProcessByCommand) Less(i, j int) bool {
+	return P[i].Command < P[j].Command
 }

@@ -12,8 +12,8 @@ func (self *Proc) update() {
 	processes := Processes()
 	// have to iterate like this in order to actually change the value
 	for i, _ := range processes {
-		processes[i].CPU /= self.cpuCount
-		processes[i].Mem /= self.memScale
+		processes[i].CPU /= self.CountCpu()
+		processes[i].Mem /= self.MemScale()
 	}
 
 	self.ungroupedProcs = processes

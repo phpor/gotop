@@ -19,6 +19,7 @@ Process Sorting
   - c: CPU
   - m: Mem
   - p: PID
+  - C: Command
 
 <tab>: toggle process grouping
 dd: kill the selected process or process group

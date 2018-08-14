@@ -168,7 +168,7 @@ func termuiColors() {
 }
 
 func widgetColors() {
-	mem.LineColor["Main"] = ui.Color(colorscheme.MainMem)
+	mem.LineColor["Mem"] = ui.Color(colorscheme.MainMem)
 	mem.LineColor["Swap"] = ui.Color(colorscheme.SwapMem)
 
 	LineColor := make(map[string]ui.Color)
