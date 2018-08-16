@@ -43,7 +43,7 @@ func NewProc(keyPressed chan bool) *Proc {
 		Table:      ui.NewTable(),
 		interval:   time.Second,
 		sortMethod: "c",
-		group:      true,
+		group:      false,
 		KeyPressed: keyPressed,
 	}
 	self.Label = "Processes"
